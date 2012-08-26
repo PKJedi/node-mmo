@@ -2,7 +2,7 @@
  * Test Game Script
  */
 (function() {
-  
+
   var canvases = $('#game > canvas'),
       // Game background & environment
       field = canvases[0],
@@ -22,7 +22,7 @@
     fieldContext.fillRect(0, 0, field.width, field.height);
   };
   grassBackground.src = 'img/grass.png';
-  
+
   // Players
   var player,
       players = [];
@@ -32,42 +32,42 @@
    */
   function CharacterSheet(dataURL, callback) {
     this.image = new Image;
-    
+
     this.spriteSize = {
       width: 32,
       height: 32
     };
-    
+
     if (typeof dataURL != 'undefined') {
       this.createFromData(dataURL, callback);
     }
   }
   CharacterSheet.prototype = {
-    
+
     // Directional offsets for sprites
     offsets: {
       south: 0, west: 32,
       east: 64, north: 96
     },
-    
+
     // Create a new spritesheet object from canvas data
     createFromData: function(dataURL, callback) {
       // Cache into local scope
       var self = this,
           image = self.image;
-      
+
       // Post-load callback
       image.onload = function() {
         self.image = image;
         callback(self);
       };
-      
+
       // Load from data url
       image.src = dataURL;
     }
-    
+
   };
-  
+
   /*
    * Character Object
    */
@@ -81,13 +81,13 @@
     };
   }
   Character.prototype = {
-    
+
     draw: function(coordinates) {
-      
+
       this.clearSprite();
-      
+
       this.coordinates = coordinates;
-      
+
       actorsContext.drawImage(
         this.sheet.image,
         this.spriteOffsets.x,
@@ -99,9 +99,9 @@
         this.sheet.spriteSize.width,
         this.sheet.spriteSize.height
       );
-      
+
     },
-    
+
     setSprite: function(direction) {
       switch (direction) {
         case 'north':
@@ -122,18 +122,18 @@
           break;
       }
     },
-    
+
     clearSprite: function() {
-      
+
       actorsContext.clearRect(
         this.coordinates.x,
         this.coordinates.y,
         this.sheet.spriteSize.width,
         this.sheet.spriteSize.height
       );
-      
+
     },
-    
+
     getPlayerInfo: function() {
       var playerInfo = {
         coordinates: this.coordinates,
@@ -141,7 +141,7 @@
       };
       return playerInfo;
     }
-    
+
   };
 
   var socket = new io.Socket('bo.cx', {
@@ -150,31 +150,31 @@
   socket.connect();
 
   socket.on('message', function(message) {
-  
+
     console.log(message);
-    
+
     switch (message.type) {
-    
+
       // Getting player character sheet
       case 'character_sheet':
-      
+
         var csheet = new CharacterSheet(message.data, function(sheet) {
           player = new Character(sheet);
           player.draw({x: 0, y: 0});
           players.push({player: player, sessionId: message.sessionId});
-        
+
           socket.send({
             type: 'joined',
             data: player.getPlayerInfo()
           });
-        
+
         });
-      
+
       break;
-    
+
       case 'joined':
         var csheet = new CharacterSheet(message.data.spritesheetDataURL, function(sheet) {
-        
+
           var newplayer = new Character(sheet);
           newplayer.setSprite(message.data.sprite);
 
@@ -182,11 +182,11 @@
           newplayer.coordinates = message.data.coordinates;
 
           newplayer.draw(message.data.coordinates);
-        
+
           players.push({sessionId: message.sessionId, player: newplayer});
         });
       break;
-      
+
       case 'player_moved':
         for (var i = 0, j = players.length; i < j; i += 1) {
           if (players[i].sessionId == message.sessionId) {
@@ -195,7 +195,7 @@
           }
         }
       break;
-    
+
       case 'disconnected':
         for (var i = 0, j = players.length; i < j; i += 1) {
           if (players[i].sessionId == message.sessionId) {
@@ -204,12 +204,12 @@
           }
         }
       break;
-    
+
       default:
         console.log(message);
       break;
     }
-  
+
   });
 
   /*
@@ -240,7 +240,7 @@
       default:
         return;
     }
-    
+
     socket.send({
       type: 'player_moved',
       data: player.getPlayerInfo()

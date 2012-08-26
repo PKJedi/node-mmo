@@ -6,20 +6,20 @@
         <!--[if IE]>
                 <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
-        
+
         <style type="text/css" media="screen">
           #game {
             width: 640px;
             height: 480px;
             position: relative;
           }
-          
+
           #game canvas {
             position: absolute;
             left: 0;
             top: 0;
           }
-          
+
           #field { z-index: 0; }
           #actors { z-index: 1; }
           #overlay { z-index: 2; }
@@ -29,9 +29,9 @@
   <div id="game">
     <canvas id="field" width="640" height="480"></canvas>
     <canvas id="actors" width="640" height="480"></canvas>
-    <canvas id="overlay" width="640" height="480"></canvas>    
+    <canvas id="overlay" width="640" height="480"></canvas>
   </div>
-  
+
   <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript" charset="utf-8"></script>
   <script src="http://bo.cx:9001/socket.io/socket.io.js" type="text/javascript" charset="utf-8"></script>
   <script src="js/game.js" type="text/javascript" charset="utf-8"></script>

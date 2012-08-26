@@ -6,7 +6,7 @@ exports.sendClientMessage = function(client, mType, mData) {
     type: mType,
     data: mData
   };
-  
+
   client.send(result);
 
 };
@@ -18,7 +18,7 @@ exports.sendClientBroadcast = function(client, mType, mData) {
     type: mType,
     data: mData
   };
-  
+
   client.broadcast(result);
 
 };

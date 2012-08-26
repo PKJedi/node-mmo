@@ -1,6 +1,6 @@
 Function.prototype.bind = function(scope) {
   var _function = this;
-  
+
   return function() {
     return _function.apply(scope, arguments);
   }
@@ -30,7 +30,7 @@ window.battle = (function() {
     },
     fillRectBackgroundGradient: function(x, y, w, h) {
       this.context.fillStyle = this.backgroundGradientStyle;
-      
+
       this.context.fillRect(x, y, w, h);
     },
     lastSparklePoint: null,
@@ -93,7 +93,7 @@ window.battle = (function() {
                 battle.context.lineWidth = 11;
                 battle.context.strokeStyle = battle.backgroundGradientStyle;
                 battle.context.stroke();
-                
+
                 while (this.locations.length > 50) {
                   this.locations.shift();
                 }
@@ -158,7 +158,7 @@ window.battle = (function() {
     begin: function() {
       this.fillRectBackgroundGradient(0, 0, this.canvas.width, this.canvas.height);
       this.beginMouseEffect();
-      
+
       return this;
     }
   };
